@@ -18,13 +18,12 @@ const CreatPost = () => {
     const postTags = tagsElement.current.value.split(/[\s,]+/).filter(Boolean);
     addPost(userId, postTitle, postBody, postReactions, postTags);
 
-
     //this is for clean after the post
-    user_IdElement.current.value="";
-    titleElement.current.value=""
-    bodyElement.current.value=""
-    reactionElement.current.value=""
-    tagsElement.current.value=""
+    user_IdElement.current.value = "";
+    titleElement.current.value = "";
+    bodyElement.current.value = "";
+    reactionElement.current.value = "";
+    tagsElement.current.value = "";
   };
   return (
     <form className="creat-post" onSubmit={handleOnSubmit}>
