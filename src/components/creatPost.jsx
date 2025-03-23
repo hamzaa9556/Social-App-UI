@@ -1,5 +1,6 @@
 import { useContext, useRef } from "react";
 import { PostList } from "../store/List-post-store";
+//import { useNavigation } from "react-router-dom";
 const CreatPost = () => {
   const { addPost } = useContext(PostList);
 
@@ -14,17 +15,30 @@ const CreatPost = () => {
     const userId = user_IdElement.current.value;
     const postTitle = titleElement.current.value;
     const postBody = bodyElement.current.value;
-    const postReactions = reactionElement.current.value;
-    const postTags = tagsElement.current.value.split(/[\s,]+/).filter(Boolean);
-    addPost(userId, postTitle, postBody, postReactions, postTags);
-
+    const reactions = reactionElement.current.value;
+    const tags = tagsElement.current.value.split(/[\s,]+/).filter(Boolean);
 
     //this is for clean after the post
-    user_IdElement.current.value="";
-    titleElement.current.value=""
-    bodyElement.current.value=""
-    reactionElement.current.value=""
-    tagsElement.current.value=""
+    user_IdElement.current.value = "";
+    titleElement.current.value = "";
+    bodyElement.current.value = "";
+    reactionElement.current.value = "";
+    tagsElement.current.value = "";
+
+    fetch("https://dummyjson.com/posts/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: postTitle,
+        body: postBody,
+        reactions: reactions,
+        userId: userId,
+        tags: tags,
+      }),
+    })
+      .then((res) => res.json())
+      .then((post) => addPost(post));
+      console.log("add  post")
   };
   return (
     <form className="creat-post" onSubmit={handleOnSubmit}>
@@ -69,14 +83,14 @@ const CreatPost = () => {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="reaction" className="form-label">
+        <label htmlFor="reactions" className="form-label">
           Number of reactions
         </label>
         <input
-          type="input"
+          type="text"
           ref={reactionElement}
           className="form-control"
-          id="reaction"
+          id="reactions"
           placeholder="How many people reacted....."
         />
       </div>
