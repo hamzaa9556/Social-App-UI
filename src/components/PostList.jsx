@@ -1,20 +1,26 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import WritePost from "./WritePost";
 import { PostList as PostListStore } from "../store/List-post-store";
 import Welcome from "./welcomemessage";
-import Loading from "./Loadingmessage";
-const PostList = () => {
-  const { postList, fecthing } = useContext(PostListStore);
+import { useLoaderData } from "react-router-dom";
 
+const PostList = () => {
+  const postList = useLoaderData();
 
   return (
     <>
-    {fecthing&&<Loading></Loading>}
-      {!fecthing&&postList.length === 0 && <Welcome />}
-      {!fecthing&&postList.map((post) => 
-        <WritePost key={post.id} post={post}/> 
-      )}
+      {postList.length === 0 && <Welcome />}
+      {postList.map((post) => (
+        <WritePost key={post.id} post={post} />
+      ))}
     </>
   );
+};
+export const postLoader = () => {
+  return fetch("https://dummyjson.com/posts")
+    .then((res) => res.json())
+    .then((data) => {
+      return data.posts;
+    });
 };
 export default PostList;

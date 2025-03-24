@@ -2,7 +2,7 @@ import { createContext, useReducer, useState, useEffect } from "react";
 export const PostList = createContext({
   //creatcontext used for to used methods in different components easily
   postList: [],
-  fecthing: false,
+
   addPost: () => {},
   deletePost: () => {},
 });
@@ -32,7 +32,7 @@ const PostListProvider = ({ children }) => {
 
   const addPost = (post) => {
     // arguments from creatpost component
-       console.log("add post")
+    console.log("add post");
     dispacthPostList({
       type: "ADD_POST",
       payload: post,
@@ -61,26 +61,8 @@ const PostListProvider = ({ children }) => {
     });
   };
 
-  const [fecthing, setFecthing] = useState(false);
-
-  useEffect(() => {
-    setFecthing(true);
-    const controller = new AbortController();
-    const signal = controller .signal;
-    fetch("https://dummyjson.com/posts", { signal })
-      .then((res) => res.json())
-      .then((data) => {
-        addIntialPost(data.posts);
-        setFecthing(false);
-      });
-    return () => {
-      console.log("cleaning use effect")
-      controller .abort();
-    };
-  }, []);
-
   return (
-    <PostList.Provider value={{ postList, fecthing, addPost, deletePost }}>
+    <PostList.Provider value={{ postList, addPost, deletePost }}>
       {children}
     </PostList.Provider>
   );
